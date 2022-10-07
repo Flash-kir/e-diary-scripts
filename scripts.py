@@ -31,9 +31,7 @@ def get_random_commendation_text():
 
 def fix_marks(schoolkid_name):
     schoolkid = get_schoolkid(schoolkid_name)
-    for mark in Mark.objects.filter(schoolkid=schoolkid.id, points__lte=3):
-        mark.points = 5
-        mark.save()
+    Mark.objects.filter(schoolkid=schoolkid.id, points__lte=3).update(points=5)
 
 
 def remove_chastisements(schoolkid_name):
@@ -45,10 +43,11 @@ def remove_chastisements(schoolkid_name):
 def create_commendation(schoolkid_name, lesson_name, text=''):
     schoolkid = get_schoolkid(schoolkid_name)
     lesson = get_random_lesson(schoolkid, lesson_name)
-    commendation = Commendation()
-    commendation.schoolkid = schoolkid
-    commendation.teacher = lesson.teacher
-    commendation.subject = lesson.subject
+    commendation = Commendation(
+        schoolkid = schoolkid,
+        teacher = lesson.teacher,
+        subject = lesson.subject
+    )
     if not text:
         commendation.text = get_random_commendation_text()
     else:
