@@ -9,20 +9,21 @@ def get_schoolkid(schoolkid_name):
     if len(schoolkid) > 1:
         sys.exit('Найдено несколько учеников с таким именем, уточните имя')
     elif len(schoolkid) == 0:
-        sys.exit(f'Ученик с именем "{schoolkid_name}" не найден, попробуйте снова')
+        sys.exit(
+            f'Ученик с именем "{schoolkid_name}" не найден, попробуйте снова')
     return schoolkid[0]
 
 
 def get_random_lesson(schoolkid, lesson_name):
     lessons = Lesson.objects.filter(
-            year_of_study=schoolkid.year_of_study, 
-            group_letter=schoolkid.group_letter, 
+            year_of_study=schoolkid.year_of_study,
+            group_letter=schoolkid.group_letter,
             subject__title__contains=lesson_name)
     if len(lessons) == 0:
         sys.exit(f'Урок с именем "{lesson_name}" не найден, попробуйте снова')
     lesson = lessons[random.randint(0, len(lessons)-1)]
     return lesson
-        
+
 
 def get_random_commendation_text():
     commendations = Commendation.objects.all()
@@ -44,9 +45,9 @@ def create_commendation(schoolkid_name, lesson_name, text=''):
     schoolkid = get_schoolkid(schoolkid_name)
     lesson = get_random_lesson(schoolkid, lesson_name)
     commendation = Commendation(
-        schoolkid = schoolkid,
-        teacher = lesson.teacher,
-        subject = lesson.subject
+        schoolkid=schoolkid,
+        teacher=lesson.teacher,
+        subject=lesson.subject
     )
     if not text:
         commendation.text = get_random_commendation_text()
